@@ -1,0 +1,30 @@
+[
+	{ "keys": ["ctrl+alt+backspace"],
+		"command": "bracket_sublime",
+		"args": { "braces": ["",""], "select": true, "replace": true }
+	},
+	{ "keys": ["ctrl+alt+9"],
+		"command": "bracket_sublime",
+		"args": { "braces": ["(",")"], "select": true, "replace": true }
+	},
+	{ "keys": ["ctrl+alt+["],
+		"command": "bracket_sublime",
+		"args": { "braces": ["[","]"], "select": true, "replace": true }
+	},
+	{ "keys": ["ctrl+alt+4"],
+		"command": "bracket_sublime",
+		"args": { "braces": ["$","$"], "select": true, "replace": true }
+	},
+	{ "keys": ["ctrl+alt+shift+["],
+		"command": "bracket_sublime",
+		"args": { "braces": ["{","}"], "select": true, "replace": true }
+	},
+	{ "keys": ["ctrl+alt+'"],
+		"command": "bracket_sublime",
+		"args": { "braces": ["'","'"], "select": true, "replace": true }
+	},
+	{ "keys": ["ctrl+alt+shift+'"],
+		"command": "bracket_sublime",
+		"args": { "braces": ["\"","\""], "select": true, "replace": true }
+	}
+]
