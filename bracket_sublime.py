@@ -16,7 +16,7 @@ CLOSING_BRACKET_LIKE = ['}', ']', ')', '"', "'", u'”', '’', '»', '$', '›'
 QUOTING_BRACKETS = ['\'', "\""]
 
 
-class BracketeerCommand(sublime_plugin.TextCommand):
+class Bracket_sublimeCommand(sublime_plugin.TextCommand):
     def run(self, edit, **kwargs):
         # check that whether regions are all empty, if true ctrl+shift+m
         original_region_all_empty = True
