@@ -104,54 +104,62 @@ class Bracket_sublimeCommand(sublime_plugin.TextCommand):
                     indent = m.group(1)
                 else:
                     substitute = tab + substitute
-                b = region.begin() - len("\n" + indent + r_brace)
+                output_end_point = region.begin() - len("\n" + indent + r_brace)
 
                 if bol_at_nl:
                     replacement = l_brace + "\n" + substitute
                     if eol_at_nl:
                         replacement += indent + r_brace + "\n"
-                        b -= 1
+                        output_end_point -= 1
                     else:
                         replacement += r_brace + "\n"
-                        b += len(indent)
+                        output_end_point += len[indent]
 
-                    if not self.view.substr(region.begin() - 1) == ' ':
+                    if not self.view.substr[region.begin() - 1] == ' ':
                         replacement = ' ' + replacement
                 else:
                     replacement = indent + l_brace + "\n" + substitute + indent + r_brace + "\n"
-                    b -= 1
-                b += len(replacement)
+                    output_end_point -= 1
+                output_end_point += len(replacement)
             else:
-                b = region.begin() + len(replacement)
+                output_end_point = region.begin() + len(replacement)
 
-
+            original_region_all_empty_empty_in_brackets=False
             if original_region_all_empty and region.b-region.a == 2 and replace and self.view.substr(region.begin()) in OPENING_BRACKET_LIKE and self.view.substr(region.end() - 1) in CLOSING_BRACKET_LIKE:
-                if l_brace == '' and r_brace == '':
-                    replacement = l_brace + replacement[1:-1] + r_brace
-                else:
-                    replacement = l_brace + replacement[2:-2] + r_brace
-                b -= 2
+                if not (l_brace == '' and r_brace == ''):
+                    original_region_all_empty_empty_in_brackets=True
+                replacement = l_brace
+                replacement += replacement[(len(l_brace)+1):-(len(l_brace)+1)]
+                replacement += r_brace
+                output_end_point -= 2
                 # print(l_brace, r_brace)
                 self.view.replace(edit, region, replacement)
                 l_brace = r_brace = ''
             elif replace and self.view.substr(region.begin() - 1) in OPENING_BRACKET_LIKE and self.view.substr(region.end()) in CLOSING_BRACKET_LIKE:
-                b -= 1
+                output_end_point -= 1
                 self.view.replace(edit, Region(region.begin() - 1, region.end() + 1), replacement)
-            elif replace and self.view.substr(region.begin()) in OPENING_BRACKET_LIKE and self.view.substr(region.end() - 1) in CLOSING_BRACKET_LIKE:
-                if l_brace == '' and r_brace == '':
-                    replacement = l_brace + replacement[1:-1] + r_brace
-                else:
-                    replacement = l_brace + replacement[2:-2] + r_brace
-                b -= 2
-                # print(l_brace, r_brace)
-                self.view.replace(edit, region, replacement)
-                l_brace = r_brace = ''
+            # elif replace and self.view.substr(region.begin()) in OPENING_BRACKET_LIKE and self.view.substr(region.end() - 1) in CLOSING_BRACKET_LIKE:
+            #     if l_brace == '' and r_brace == '':
+            #         replacement = l_brace + replacement[1:-1] + r_brace
+            #     else:
+            #         replacement = l_brace + replacement[2:-2] + r_brace
+            #     output_end_point -= 2
+            #     # print(l_brace, r_brace)
+            #     self.view.replace(edit, region, replacement)
+            #     l_brace = r_brace = ''
             else:
                 self.view.replace(edit, region, replacement)
 
-            if select:
-                self.view.sel().add(Region(b - len(replacement) + len(l_brace), b - len(r_brace)))
+            if original_region_all_empty_empty_in_brackets:
+                self.view.sel().add(output_end_point-1)
+            elif select:
+                self.view.sel().add(
+                                    Region(
+                                        output_end_point - len(replacement) + len(l_brace), 
+                                        output_end_point - len(r_brace)
+                                    )
+                                )
             else:
-                self.view.sel().add(Region(b, b))
+                self.view.sel().add(output_end_point)
 
 
